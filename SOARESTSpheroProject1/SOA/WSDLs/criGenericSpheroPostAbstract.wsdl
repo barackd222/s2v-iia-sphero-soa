@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+     name="PostMessage"
+     targetNamespace="http://xmlns.oracle.com/PostMessage"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:postmsg="http://xmlns.oracle.com/PostMessage"
+     xmlns:client="http://www.oracle.com/data/services/post/message/v1"
+    >
+    <wsdl:types>
+        <schema elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.oracle.com/data/services/post/message/v1">
+            <element name="colourRequest" type="client:ColourRequestType"/>
+            <element name="shapeRequest" type="client:ShapeRequestType"/>
+            <element name="MsgFault" type="client:MsgFaultType"/>
+            <complexType name="ColourRequestType">
+                <sequence>
+                    <element name="colour" type="string"/>
+                </sequence>
+            </complexType>
+            <complexType name="ShapeRequestType">
+                <sequence>
+                    <element name="shape" type="string"/>
+                    <element name="colour" type="string"/>
+                </sequence>
+            </complexType>
+            <complexType name="MsgFaultType">
+                <sequence>
+                    <element name="ErrMsg" type="string"/>
+                </sequence>
+            </complexType>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="ColourRequestMessage">
+        <wsdl:part name="payload" element="client:colourRequest"/>
+    </wsdl:message>
+    <wsdl:message name="MsgFaultMessage">
+        <wsdl:part name="fault" element="client:MsgFault"/>
+    </wsdl:message>
+    <wsdl:message name="ShapeRequestMessage">
+        <wsdl:part name="payload" element="client:shapeRequest"/>
+    </wsdl:message>
+    <wsdl:portType name="SpheroPostAction">
+        <wsdl:operation name="setColor">
+            <wsdl:input message="postmsg:ColourRequestMessage"/>
+            <wsdl:fault name="MsgFaultMessage" message="postmsg:MsgFaultMessage"/>
+        </wsdl:operation>
+        <wsdl:operation name="setShape">
+            <wsdl:input message="postmsg:ShapeRequestMessage"/>
+            <wsdl:fault name="MsgFaultMessage" message="postmsg:MsgFaultMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

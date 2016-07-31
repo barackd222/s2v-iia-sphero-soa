@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+     name="BPELProcess1"
+     targetNamespace="http://xmlns.oracle.com/MySpheroService/dummyProject1/BPELProcess1"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:client="http://xmlns.oracle.com/MySpheroService/dummyProject1/BPELProcess1"
+     xmlns:ns1="http://www.oracle.com/data/services/post/message/v1"
+     xmlns:ns2="http://xmlns.oracle.com/PostMessage"
+     xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    >
+    <wsdl:documentation>
+        <abstractWSDL>https://localhost:7102/soa-infra/services/default/dummyProject1!1.0/WSDLs/BPELProcess1.wsdl</abstractWSDL>
+    </wsdl:documentation>
+    <plnk:partnerLinkType name="BPELProcess1">
+        <plnk:role name="BPELProcess1Provider" portType="client:BPELProcess1"/>
+        <plnk:role name="BPELProcess1Requester" portType="client:BPELProcess1Callback"/>
+    </plnk:partnerLinkType>
+    <wsp:Policy xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+         wsu:Id="wsaddr_policy" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy">
+        <wsaw:UsingAddressing xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"/>
+    </wsp:Policy>
+    <wsdl:import namespace="http://xmlns.oracle.com/PostMessage" location="bpelprocess1_client_ep_WSDL_criGenericPostMessageAbstract.wsdl"/>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://xmlns.oracle.com/MySpheroService/dummyProject1/BPELProcess1"
+                 schemaLocation="../Schemas/BPELProcess1.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="BPELProcess1RequestMessage">
+        <wsdl:part name="payload" element="ns1:messageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="BPELProcess1ResponseMessage">
+        <wsdl:part name="payload" element="client:processResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="BPELProcess1">
+        <wsdl:operation name="process">
+            <wsdl:input message="client:BPELProcess1RequestMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:portType name="BPELProcess1Callback">
+        <wsdl:operation name="processResponse">
+            <wsdl:input message="client:BPELProcess1ResponseMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="BPELProcess1Binding" type="client:BPELProcess1">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsp:PolicyReference xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" URI="#wsaddr_policy"
+             wsdl:required="false"/>
+        <wsdl:operation name="process">
+            <soap:operation style="document" soapAction="process"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="BPELProcess1CallbackBinding" type="client:BPELProcess1Callback">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="processResponse">
+            <soap:operation style="document" soapAction="processResponse"/>
+            <wsdl:input>
+                <soap:body use="literal" namespace="http://xmlns.oracle.com/MySpheroService/dummyProject1/BPELProcess1"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="bpelprocess1_client_ep">
+        <wsdl:port name="BPELProcess1_pt" binding="client:BPELProcess1Binding">
+            <soap:address location="https://localhost:7102/soa-infra/services/default/dummyProject1!1.0*soa_c9f3b28d-452d-45d0-85c1-124bd857138b/bpelprocess1_client_ep"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

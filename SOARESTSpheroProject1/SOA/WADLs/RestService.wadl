@@ -1,0 +1,51 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<application xmlns:soa="http://www.oracle.com/soa/rest" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:client="http://www.oracle.com/data/services/post/message/v1" xmlns="http://wadl.dev.java.net/2009/02">
+   <doc title="RestService">RestService</doc>
+   <grammars>
+      <schema elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.oracle.com/data/services/post/message/v1" xmlns:client="http://www.oracle.com/data/services/post/message/v1">
+            <element name="colourRequest" type="client:ColourRequestType"/>
+            <element name="shapeRequest" type="client:ShapeRequestType"/>
+            <element name="MsgFault" type="client:MsgFaultType"/>
+            <complexType name="ColourRequestType">
+                <sequence>
+                    <element name="colour" type="string"/>
+                </sequence>
+            </complexType>
+            <complexType name="ShapeRequestType">
+                <sequence>
+                    <element name="shape" type="string"/>
+                    <element name="colour" type="string"/>
+                </sequence>
+            </complexType>
+            <complexType name="MsgFaultType">
+                <sequence>
+                    <element name="ErrMsg" type="string"/>
+                </sequence>
+            </complexType>
+        </schema>
+   </grammars>
+   <resources>
+      <resource path="/shape">
+         <method name="POST" soa:wsdlOperation="setShape">
+            <request>
+               <representation mediaType="application/json" element="cns:shapeRequest" xmlns:cns="http://www.oracle.com/data/services/post/message/v1"/>
+            </request>
+            <response status="202"/>
+            <response status="400" soa:wsdlFaultName="MsgFaultMessage">
+               <representation mediaType="application/xml" element="cns:MsgFault" xmlns:cns="http://www.oracle.com/data/services/post/message/v1"/>
+            </response>
+         </method>
+      </resource>
+      <resource path="/colour">
+         <method name="POST" soa:wsdlOperation="setColor">
+            <request>
+               <representation mediaType="application/json" element="cns:colourRequest" xmlns:cns="http://www.oracle.com/data/services/post/message/v1"/>
+            </request>
+            <response status="202"/>
+            <response status="400" soa:wsdlFaultName="MsgFaultMessage">
+               <representation mediaType="application/xml" element="cns:MsgFault" xmlns:cns="http://www.oracle.com/data/services/post/message/v1"/>
+            </response>
+         </method>
+      </resource>
+   </resources>
+</application>

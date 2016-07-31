@@ -1,0 +1,15 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://TargetNamespace.com/spheroFileService" targetNamespace="http://TargetNamespace.com/spheroFileService" elementFormDefault="qualified" xmlns:nxsd="http://xmlns.oracle.com/pcbpel/nxsd" nxsd:version="JSON" nxsd:encoding="US-ASCII">
+   <xsd:element name="Sphero-Commands">
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element name="shape" type="xsd:string"/>
+            <xsd:element name="color" type="xsd:string"/>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+<xsd:annotation xmlns="">
+      <xsd:appinfo>NXSDSAMPLE=/C:/Users/dreid/Documents/MyStuff/Products/SOA/MFT/mft-samples/sample_input/sphero-shape-colour.json</xsd:appinfo>
+      <xsd:appinfo>USEHEADER=false</xsd:appinfo>
+   </xsd:annotation>
+</xsd:schema>

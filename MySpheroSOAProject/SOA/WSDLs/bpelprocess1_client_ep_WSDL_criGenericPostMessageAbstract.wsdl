@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+     name="PostMessage"
+     targetNamespace="http://xmlns.oracle.com/PostMessage"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:postmsg="http://xmlns.oracle.com/PostMessage"
+     xmlns:client="http://www.oracle.com/data/services/post/message/v1"
+    >
+    <wsdl:types>
+        <schema elementFormDefault="qualified" xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.oracle.com/data/services/post/message/v1">
+            <element name="messageRequest" type="client:MessageRequestType"/>
+            <element name="messageResponse" type="client:MessageResponseType"/>
+            <element name="MsgFault" type="client:MsgFaultType"/>
+            <complexType name="MessageRequestType">
+                <sequence>
+                    <element name="ID" type="string"/>
+                    <element name="Message" type="string"/>
+                    <element name="Date" type="date"/>
+                </sequence>
+            </complexType>
+            <complexType name="MessageResponseType">
+                <sequence>
+                    <element name="Response" type="string"/>
+                </sequence>
+            </complexType>
+            <complexType name="MsgFaultType">
+                <sequence>
+                    <element name="ErrMsg" type="string"/>
+                </sequence>
+            </complexType>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="MyRequestMessage">
+        <wsdl:part name="payload" element="client:messageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="MyResponseMessage">
+        <wsdl:part name="payload" element="client:messageResponse"/>
+    </wsdl:message>
+    <wsdl:message name="MsgFaultMessage">
+        <wsdl:part name="fault" element="client:MsgFault"/>
+    </wsdl:message>
+    <wsdl:portType name="PostMessage">
+        <wsdl:operation name="postMessage">
+            <wsdl:input message="postmsg:MyRequestMessage"/>
+            <wsdl:output message="postmsg:MyResponseMessage"/>
+            <wsdl:fault name="MsgFaultMessage" message="postmsg:MsgFaultMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

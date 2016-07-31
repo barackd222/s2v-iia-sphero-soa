@@ -1,0 +1,60 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer
+
+  Created: Sat Jul 30 08:52:18 ACST 2016
+  Author:  dreid
+  Type: BPEL 2.0 Process
+  Purpose: Empty BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="myBPEL"
+               targetNamespace="http://xmlns.oracle.com/MySpheroService/MySpheroSOAProject/myBPEL"
+               xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+               xmlns:client="http://xmlns.oracle.com/MySpheroService/MySpheroSOAProject/myBPEL"
+               xmlns:ora="http://schemas.oracle.com/xpath/extension"
+               xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+               xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:ns1="http://xmlns.oracle.com/pcbpel/adapter/file/MySpheroService/MySpheroSOAProject/spheroFileService"
+         xmlns:ui="http://xmlns.oracle.com/soa/designer" xmlns:ns2="http://TargetNamespace.com/spheroFileService"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="json"
+         xmlns:ns4="http://xmlns.oracle.com/MySpheroService/MySpheroSOAProject/RestReference_2"
+         xmlns:ns5="http://www.oracle.com/data/services/post/message/v1">
+
+  <!--
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     ORCHESTRATION LOGIC
+     Set of activities coordinating the flow of messages across the
+     services integrated within this business process
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  -->
+  <import namespace="http://TargetNamespace.com/spheroFileService" location="../Schemas/sphero_controlfile_schema.xsd"
+          importType="http://www.w3.org/2001/XMLSchema"/>
+  <import namespace="http://xmlns.oracle.com/pcbpel/adapter/file/MySpheroService/MySpheroSOAProject/spheroFileService"
+          location="../WSDLs/spheroFileService.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"
+          ui:processWSDL="true"/>
+  <partnerLinks>
+    <partnerLink name="spheroFileService" partnerLinkType="ns1:Read_plt" myRole="Read_role"/>
+    <partnerLink name="RestReference_2" partnerLinkType="ns4:RestReference_2" partnerRole="RestReference_2Provider"/>
+  </partnerLinks>
+  <variables>
+    <variable name="Receive1_Read_InputVariable" messageType="ns1:Read_msg"/>
+    <variable name="InvokeREST_setColor_InputVariable" messageType="ns4:setColor_inputMessage"/>
+    <variable name="InvokeREST_setColor_OutputVariable" messageType="ns4:Rest_EmptyMessage"/>
+  </variables>
+  <sequence name="main">
+    <receive name="Receive1" createInstance="yes" partnerLink="spheroFileService" portType="ns1:Read_ptt"
+             operation="Read" variable="Receive1_Read_InputVariable"/>
+    <assign name="Assign1">
+      <copy>
+        <from>$Receive1_Read_InputVariable.body/ns2:color</from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeREST_setColor_InputVariable.request/ns5:colour</to>
+      </copy>
+    </assign>
+    <invoke name="InvokeRESTviaWSDL" partnerLink="RestReference_2"
+            portType="ns4:RestReference_2_ptt" operation="setColor" inputVariable="InvokeREST_setColor_InputVariable" outputVariable="InvokeREST_setColor_OutputVariable"
+            bpelx:invokeAsDetail="no"/>
+    <invoke name="Invoke1"/>
+  </sequence>
+</process>

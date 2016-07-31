@@ -1,0 +1,78 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  Oracle JDeveloper BPEL Designer 
+  
+  Created: Wed Jul 27 15:44:42 ACST 2016
+  Author:  dreid
+  Type: BPEL 2.0 Process
+  Purpose: Asynchronous BPEL Process
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+<process name="SpheroBPELProject"
+         targetNamespace="http://xmlns.oracle.com/MySpheroService/MySpheroSOAProject/SpheroBPELProject"
+         xmlns="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:client="http://xmlns.oracle.com/MySpheroService/MySpheroSOAProject/SpheroBPELProject"
+         xmlns:ora="http://schemas.oracle.com/xpath/extension"
+         xmlns:ui="http://xmlns.oracle.com/soa/designer"
+         xmlns:bpelx="http://schemas.oracle.com/bpel/extension"
+         xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable"
+         xmlns:ns1="http://xmlns.oracle.com/pcbpel/adapter/file/MySpheroService/MySpheroSOAProject/spheroFileService"
+         xmlns:ns2="http://TargetNamespace.com/spheroFileService">
+
+    <import ui:processWSDL="true" namespace="http://xmlns.oracle.com/MySpheroService/MySpheroSOAProject/SpheroBPELProject" location="../WSDLs/SpheroBPELProject.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        PARTNERLINKS                                                      
+        List of services participating in this BPEL process               
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    --> 
+    <partnerLinks>
+        <!-- 
+      The 'client' role represents the requester of this service. It is 
+      used for callback. The location and correlation information associated
+      with the client role are automatically set using WS-Addressing.
+    -->
+        <partnerLink name="spherobpelproject_client" partnerLinkType="client:SpheroBPELProject" myRole="SpheroBPELProjectProvider" partnerRole="SpheroBPELProjectRequester"/>
+        <partnerLink name="spheroFileService" partnerLinkType="ns1:Read_plt" myRole="Read_role"/>
+        <partnerLink name="RestReference" bpelx:wadl="yes"/>
+    </partnerLinks>
+
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        VARIABLES                                                        
+        List of messages and XML documents used within this BPEL process 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+    <variables>
+        <!-- Reference to the message passed as input during initiation -->
+        <variable name="inputVariable" messageType="client:SpheroBPELProjectRequestMessage"/>
+
+        <!-- Reference to the message that will be sent back to the requester during callback -->
+        <variable name="outputVariable" messageType="client:SpheroBPELProjectResponseMessage"/>
+    </variables>
+
+    <!-- 
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       ORCHESTRATION LOGIC                                               
+       Set of activities coordinating the flow of messages across the    
+       services integrated within this business process                  
+      ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    -->
+    <sequence name="main">
+        <!-- Receive input from requestor. (Note: This maps to operation defined in SpheroBPELProject.wsdl) -->
+        <receive name="receiveInput" partnerLink="spherobpelproject_client" portType="client:SpheroBPELProject" operation="process" variable="inputVariable" createInstance="yes"/>
+        <assign name="Assign1">
+            <copy>
+                <from>$inputVariable.payload/ns2:color</from>
+                <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$outputVariable.payload/client:result</to>
+            </copy>
+        </assign>
+        <invoke name="Invoke1" partnerLink="RestReference" inputVariable="inputVariable"
+                bpelx:method="setColor" bpelx:invokeAsDetail="no"/>
+        <!-- 
+          Asynchronous callback to the requester. (Note: the callback location and correlation id is transparently handled using WS-addressing.)
+        -->
+        <invoke name="callbackClient" partnerLink="spherobpelproject_client" portType="client:SpheroBPELProjectCallback" operation="processResponse" inputVariable="outputVariable"/>
+    </sequence>
+</process>
