@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAConfigPlan xmlns:jca="http://platform.integration.oracle/blocks/adapter/fw/metadata" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:orawsp="http://schemas.oracle.com/ws/2006/01/policy" xmlns:edl="http://schemas.oracle.com/events/edl" xmlns="http://schemas.oracle.com/soa/configplan">
+   <composite name="MySpheroSOAProject">
+      <!--Add search and replace rules for the import section of a composite
+	Example:
+	<searchReplace>
+		<search>http://my-dev-server</search>
+		<replace>http://my-test-server</replace>
+	<searchReplace>
+	<searchReplace>
+		<search>8888</search>
+		<replace>8889</replace>
+	<searchReplace>-->
+      <import>
+         <searchReplace>
+            <search/>
+            <replace/>
+         </searchReplace>
+      </import>
+      <!--Add search and replace rules for the service properties-->
+      <service name="spheroFileService">
+         <property name="FILE_IN_DIR">
+            <replace>C:\Users\dreid\spherofiles\in</replace>
+         </property>
+         <property name="FILE_ARCHIVE_DIR">
+            <replace>C:\Users\dreid\spherofiles\archived</replace>
+         </property>
+         <!--Add search and replace rules for the binding properties-->
+         <binding type="jca">
+            <property name="useRejectedMessageRecovery">
+               <replace>true</replace>
+            </property>
+         </binding>
+      </service>
+      <property name="productVersion">
+         <replace>12.2.1.0.0.151013</replace>
+      </property>
+      <property name="compositeID">
+         <replace>22045783-d103-4628-b5f2-86e14e41ba10</replace>
+      </property>
+      <!--Add search and replace rules for the component properties
+	For components and service/reference bindings, you can add policy references.
+	Example:
+	<component name="*">
+		<wsp:PolicyReference orawsp:category="management" orawsp:status="enabled" URI="oracle/log_policy"/>
+	</component>-->
+      <component name="myBPEL">
+         <property name="bpel.config.transaction">
+            <replace>requiresNew</replace>
+         </property>
+         <property name="bpel.config.oneWayDeliveryPolicy">
+            <replace>sync</replace>
+         </property>
+      </component>
+      <reference name="SpheroReference">
+         <binding type="rest"/>
+      </reference>
+   </composite>
+   <!--To configure monitor.config: 
+	<property name="enabled"><replace>true</replace></property>
+	<property name="dataObjectsFolder"><searchReplace><search>mydev</search><replace>myproduction</replace></searchReplace></property>
+	
+	sample properties to configure for file/ftp adapter: 
+	<jca:property name="PhysicalDirectory"><replace>c:\temp</replace></jca:property>
+	<jca:property name="DeleteFile"><replace>true</replace></jca:property>
+	<jca:property name="PollingFrequency"><replace>3</replace></jca:property>
+	
+	To add search and replace rules for wsdls, xsd and jca files
+	Example:
+	<searchReplace>
+		<search>http://my-dev-server</search>
+		<replace>http://my-test-server</replace>
+	<searchReplace>
+	<searchReplace>
+		<search>8888</search>
+		<replace>8889</replace>
+	<searchReplace>
+	-->
+   <wsdlAndSchema name="Adapters/spheroFileService_file.jca|Schemas/BPELProcess1.xsd|Schemas/nxsd_schema1.xsd|Schemas/SpheroBPELProject.xsd|Schemas/sphero_controlfile_schema.xsd|WSDLs/bpelprocess1_client_ep.wsdl|WSDLs/bpelprocess1_client_ep_WSDL_criGenericPostMessageAbstract.wsdl|WSDLs/spheroFileService.wsdl|WSDLs/SpheroReference.wsdl">
+      <searchReplace>
+         <search/>
+         <replace/>
+      </searchReplace>
+   </wsdlAndSchema>
+</SOAConfigPlan>

@@ -1,4 +1,3 @@
-<?xml version= '1.0' encoding= 'UTF-8' ?>
 <wsdl:definitions
      name="spheroFileService"
      targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/file/MySpheroService/MySpheroSOAProject/spheroFileService"
@@ -9,18 +8,15 @@
      xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
      xmlns:imp1="http://TargetNamespace.com/spheroFileService"
     >
-    <plt:partnerLinkType name="Read_plt">
-        <plt:role name="Read_role">
-            <plt:portType name="tns:Read_ptt"/>
-        </plt:role>
-    </plt:partnerLinkType>
+  <plt:partnerLinkType name="Read_plt" >
+    <plt:role name="Read_role" >
+      <plt:portType name="tns:Read_ptt" />
+    </plt:role>
+  </plt:partnerLinkType>
     <wsdl:types>
-        <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/file/MySpheroService/MySpheroSOAProject/spheroFileService"
-             xmlns:jca="http://xmlns.oracle.com/pcbpel/wsdl/jca/" xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
-             xmlns:pc="http://xmlns.oracle.com/pcbpel/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-             xmlns:imp1="http://TargetNamespace.com/spheroFileService">
-            <import namespace="http://TargetNamespace.com/spheroFileService" schemaLocation="../Schemas/sphero_controlfile_schema.xsd"/>
-        </schema>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema" >
+        <import namespace="http://TargetNamespace.com/spheroFileService" schemaLocation="../Schemas/sphero_controlfile_schema.xsd" />
+      </schema>
     </wsdl:types>
     <wsdl:message name="Read_msg">
         <wsdl:part name="body" element="imp1:Sphero-Commands"/>

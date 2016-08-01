@@ -1,6 +1,6 @@
 <?xml version= '1.0' encoding= 'UTF-8' ?>
 <wsdl:definitions
-     name="RestReference_2"
+     name="SpheroReference"
      targetNamespace="http://xmlns.oracle.com/MySpheroService/MySpheroSOAProject/SpheroReference"
      xmlns:tns="http://xmlns.oracle.com/MySpheroService/MySpheroSOAProject/SpheroReference"
      xmlns:inp1="http://www.oracle.com/data/services/post/message/v1"

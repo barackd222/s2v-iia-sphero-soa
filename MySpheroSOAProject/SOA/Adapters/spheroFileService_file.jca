@@ -3,13 +3,12 @@
   <connection-factory UIincludeWildcard="*.json" location="eis/FileAdapter"/>
   <endpoint-activation portType="Read_ptt" operation="Read">
     <activation-spec className="oracle.tip.adapter.file.inbound.FileActivationSpec">
-      <property name="PhysicalDirectory" value="C:\Users\dreid\spherofiles\in"/>
-      <property name="PhysicalArchiveDirectory" value="C:\Users\dreid\spherofiles\archived"/>
-      <property name="PublishSize" value="1"/>
+      <property name="LogicalArchiveDirectory" value="FILE_ARCHIVE_DIR"/>
+      <property name="LogicalDirectory" value="FILE_IN_DIR"/>
       <property name="UseHeaders" value="false"/>
       <property name="MinimumAge" value="0"/>
       <property name="Recursive" value="false"/>
-      <property name="PollingFrequency" value="60"/>
+      <property name="PollingFrequency" value="30"/>
       <property name="DeleteFile" value="true"/>
       <property name="IncludeFiles" value=".*\.json"/>
     </activation-spec>
