@@ -1,0 +1,1 @@
+http://buccoli:3001/sphero/shape/{shape}/color/{colour}
