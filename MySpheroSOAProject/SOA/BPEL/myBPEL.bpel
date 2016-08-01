@@ -19,8 +19,9 @@
          xmlns:ns1="http://xmlns.oracle.com/pcbpel/adapter/file/MySpheroService/MySpheroSOAProject/spheroFileService"
          xmlns:ui="http://xmlns.oracle.com/soa/designer" xmlns:ns2="http://TargetNamespace.com/spheroFileService"
          xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns3="json"
-         xmlns:ns4="http://xmlns.oracle.com/MySpheroService/MySpheroSOAProject/RestReference_2"
-         xmlns:ns5="http://www.oracle.com/data/services/post/message/v1">
+         xmlns:ns4="http://xmlns.oracle.com/MySpheroService/MySpheroSOAProject/SpheroReference"
+         xmlns:ns5="http://www.oracle.com/data/services/post/message/v1"
+         xmlns:ns6="http://xmlns.oracle.com/MySpheroService/MySpheroSOAProject/RestReference_2">
 
   <!--
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,25 +37,29 @@
           ui:processWSDL="true"/>
   <partnerLinks>
     <partnerLink name="spheroFileService" partnerLinkType="ns1:Read_plt" myRole="Read_role"/>
-    <partnerLink name="RestReference_2" partnerLinkType="ns4:RestReference_2" partnerRole="RestReference_2Provider"/>
+    <partnerLink name="SpheroReference" partnerLinkType="ns4:SpheroReference" partnerRole="SpheroReference_Provider"/>
   </partnerLinks>
   <variables>
-    <variable name="Receive1_Read_InputVariable" messageType="ns1:Read_msg"/>
-    <variable name="InvokeREST_setColor_InputVariable" messageType="ns4:setColor_inputMessage"/>
-    <variable name="InvokeREST_setColor_OutputVariable" messageType="ns4:Rest_EmptyMessage"/>
+    <variable name="ReceiveFile_Read_InputVariable" messageType="ns1:Read_msg"/>
+    <variable name="SendShapeToSphero_setShape_InputVariable" messageType="ns4:setShape_inputMessage"/>
+    <variable name="SendShapeToSphero_setShape_OutputVariable" messageType="ns4:Rest_EmptyMessage"/>
   </variables>
   <sequence name="main">
-    <receive name="Receive1" createInstance="yes" partnerLink="spheroFileService" portType="ns1:Read_ptt"
-             operation="Read" variable="Receive1_Read_InputVariable"/>
-    <assign name="Assign1">
+    <receive name="ReceiveFile" createInstance="yes" partnerLink="spheroFileService" portType="ns1:Read_ptt"
+             operation="Read" variable="ReceiveFile_Read_InputVariable"/>
+    <assign name="AssignSpheroColourAndShape">
       <copy>
-        <from>$Receive1_Read_InputVariable.body/ns2:color</from>
-        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$InvokeREST_setColor_InputVariable.request/ns5:colour</to>
+        <from>$ReceiveFile_Read_InputVariable.body/ns2:shape</from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$SendShapeToSphero_setShape_InputVariable.request/ns5:shape</to>
+      </copy>
+      <copy>
+        <from>$ReceiveFile_Read_InputVariable.body/ns2:color</from>
+        <to expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0">$SendShapeToSphero_setShape_InputVariable.request/ns5:colour</to>
       </copy>
     </assign>
-    <invoke name="InvokeRESTviaWSDL" partnerLink="RestReference_2"
-            portType="ns4:RestReference_2_ptt" operation="setColor" inputVariable="InvokeREST_setColor_InputVariable" outputVariable="InvokeREST_setColor_OutputVariable"
-            bpelx:invokeAsDetail="no"/>
-    <invoke name="Invoke1"/>
+    <invoke name="SendShapeToSphero" partnerLink="SpheroReference"
+            portType="ns4:SpheroReference_ptt" operation="setShape"
+            inputVariable="SendShapeToSphero_setShape_InputVariable"
+            outputVariable="SendShapeToSphero_setShape_OutputVariable" bpelx:invokeAsDetail="no"/>
   </sequence>
 </process>
